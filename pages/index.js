@@ -16,6 +16,11 @@ export default function Home() {
       </div>
       <main>
         <h1 className="title"></h1>
+        <img
+          className="img"
+          src="/bh-no-lunch.png"
+          alt="Brandon is so hungry! If only his wife would tell him when lunch was ready..."
+        ></img>
         <h1 className="icons">
           <span className="eyes">🍲</span>
           <span className="eyes">👀</span>
@@ -44,6 +49,23 @@ export default function Home() {
           }
           100% {
             transform: scale(1, 1) translateY(0);
+          }
+        }
+        @keyframes drift {
+          0% {
+            transform: translateX(0);
+          }
+          25% {
+            transform: translateX(500px);
+          }
+          50% {
+            transform: translateX(0);
+          }
+          75% {
+            transform: translateX(-500px);
+          }
+          100% {
+            transform: translateX(0);
           }
         }
         .stage {
