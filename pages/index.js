@@ -1,142 +1,204 @@
 import Head from 'next/head';
-
+import { useState } from 'react';
+import blackHolePath from '../src/blackHolePath';
 export default function Home() {
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgRequested, setImgRequested] = useState(false);
   return (
     <div className="container">
       <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>CSS Loaders</title>
+        {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
-
-      <div className="stage">
-        <div className="box bounce-7">
-          <div>NO LUNCH</div>
-          <div>FOR BRANDON HUNT</div>
-        </div>
-      </div>
-      <main>
-        <h1 className="title"></h1>
+      <button onClick={() => setImgRequested(!imgRequested)}>
+        {imgRequested ? 'Reset' : 'Load Image'}
+      </button>
+      <svg width="0" height="0" xmlns="http://www.w3.org/2000/svg">
+        <clipPath id="black-hole-clip">
+          <path d={blackHolePath}>
+            {imgLoaded ? (
+              <animateTransform
+                attributeName="transform"
+                attributeType="XML"
+                type="rotate"
+                from="0 400 413"
+                to="360 400 413"
+                dur="4s"
+                repeatCount="indefinite"
+              />
+            ) : (
+              <animateTransform
+                attributeName="transform"
+                attributeType="XML"
+                type="rotate"
+                from="0 400 413"
+                to="360 400 413"
+                dur="4s"
+                repeatCount="indefinite"
+              />
+            )}
+          </path>
+        </clipPath>
+      </svg>
+      <main id="main">
         <img
-          className="img"
-          src="/bh-no-lunch.png"
-          alt="Brandon is so hungry! If only his wife would tell him when lunch was ready..."
-        ></img>
-        <h1 className="icons">
-          <span className="eyes">🍲</span>
-          <span className="eyes">👀</span>
-        </h1>
+          onClick={(evt) => {
+            console.log(evt.pageX, evt.pageY);
+          }}
+          onLoad={() => setImgLoaded(true)}
+          className={`space-img ${imgLoaded ? 'loaded' : ''}`}
+          src={imgRequested ? '/space_big.jpg' : '#'}
+        />
+        <footer id="footer">
+          <a href="/resources">Resources</a>
+        </footer>
       </main>
 
       <style jsx>{`
-        @keyframes bounce-7 {
-          0% {
-            transform: scale(1, 1) translateY(0);
-          }
-          10% {
-            transform: scale(1.1, 0.9) translateY(0);
-          }
-          30% {
-            transform: scale(0.9, 1.1) translateY(-100px);
-          }
-          50% {
-            transform: scale(1.05, 0.95) translateY(0);
-          }
-          57% {
-            transform: scale(1, 1) translateY(-7px);
-          }
-          64% {
-            transform: scale(1, 1) translateY(0);
-          }
-          100% {
-            transform: scale(1, 1) translateY(0);
-          }
-        }
-        @keyframes drift {
-          0% {
-            transform: translateX(0);
-          }
-          25% {
-            transform: translateX(500px);
-          }
-          50% {
-            transform: translateX(0);
-          }
-          75% {
-            transform: translateX(-500px);
-          }
-          100% {
-            transform: translateX(0);
-          }
-        }
-        .stage {
+        #main {
           display: flex;
-          height: 330px;
-          width: 100%;
-        }
-        .box {
-          text-align: center;
-          align-self: flex-end;
-          animation-duration: 2s;
-          animation-iteration-count: infinite;
-          background-color: #f44336;
-          height: 200px;
-          margin: 0 auto 0 auto;
-          transform-origin: bottom;
-          width: 200px;
-        }
-        .bounce-7 {
-          font-size: 28px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          animation-name: bounce-7;
-          animation-timing-function: cubic-bezier(0.28, 0.84, 0.42, 1);
-        }
-
-        .title {
-          font-family: Open Sans, Helvetica, sans-serif;
-          display: online-block;
-        }
-        .icons {
-          line-height: 0;
-          transform: translateY(-150px);
-          font-size: 500px;
-        }
-        .eyes {
-          transform: scaleX(-1);
-        }
-        .container {
-          min-height: 100vh;
-          padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
+          justify-content: space-between;
+           {
+            /* flex-direction: column; */
+          }
           align-items: center;
         }
-
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
+        #footer {
+          align-self: flex-start;
+        }
+        .space-img {
+          background: grey;
+          height: 826px;
+          width: 800px;
+          clip-path: url(#black-hole-clip);
+        }
+        .space-img.loaded {
         }
       `}</style>
 
       <style jsx global>{`
         html,
-        body {
-          padding: 0;
+        body,
+        div,
+        span,
+        applet,
+        object,
+        iframe,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        blockquote,
+        pre,
+        a,
+        abbr,
+        acronym,
+        address,
+        big,
+        cite,
+        code,
+        del,
+        dfn,
+        em,
+        img,
+        ins,
+        kbd,
+        q,
+        s,
+        samp,
+        small,
+        strike,
+        strong,
+        sub,
+        sup,
+        tt,
+        var,
+        b,
+        u,
+        i,
+        center,
+        dl,
+        dt,
+        dd,
+        ol,
+        ul,
+        li,
+        fieldset,
+        form,
+        label,
+        legend,
+        table,
+        caption,
+        tbody,
+        tfoot,
+        thead,
+        tr,
+        th,
+        td,
+        article,
+        aside,
+        canvas,
+        details,
+        embed,
+        figure,
+        figcaption,
+        footer,
+        header,
+        hgroup,
+        menu,
+        nav,
+        output,
+        ruby,
+        section,
+        summary,
+        time,
+        mark,
+        audio,
+        video {
           margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
+          padding: 0;
+          border: 0;
+          font-size: 100%;
+          font: inherit;
+          vertical-align: baseline;
         }
-
-        * {
-          box-sizing: border-box;
+        article,
+        aside,
+        details,
+        figcaption,
+        figure,
+        footer,
+        header,
+        hgroup,
+        menu,
+        nav,
+        section {
+          display: block;
+        }
+        body {
+          line-height: 1;
+        }
+        ol,
+        ul {
+          list-style: none;
+        }
+        blockquote,
+        q {
+          quotes: none;
+        }
+        blockquote:before,
+        blockquote:after,
+        q:before,
+        q:after {
+          content: '';
+          content: none;
+        }
+        table {
+          border-collapse: collapse;
+          border-spacing: 0;
         }
       `}</style>
     </div>
