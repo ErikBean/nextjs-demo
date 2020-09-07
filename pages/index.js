@@ -16,27 +16,29 @@ export default function Home() {
       <svg width="0" height="0" xmlns="http://www.w3.org/2000/svg">
         <clipPath id="black-hole-clip">
           <path d={blackHolePath}>
-            {imgLoaded ? (
+            {!imgLoaded && (
               <animateTransform
+                id="bh-spin"
                 attributeName="transform"
                 attributeType="XML"
                 type="rotate"
                 from="0 400 413"
                 to="360 400 413"
-                dur="4s"
-                repeatCount="indefinite"
-              />
-            ) : (
-              <animateTransform
-                attributeName="transform"
-                attributeType="XML"
-                type="rotate"
-                from="0 400 413"
-                to="360 400 413"
-                dur="4s"
+                dur="2s"
                 repeatCount="indefinite"
               />
             )}
+
+            <animateTransform
+              id="bh-scale"
+              attributeName="transform"
+              attributeType="XML"
+              type="scale"
+              values="1; 3"
+              dur="4s"
+              repeatCount="1"
+              begin="indefinite"
+            />
           </path>
         </clipPath>
       </svg>
@@ -45,7 +47,10 @@ export default function Home() {
           onClick={(evt) => {
             console.log(evt.pageX, evt.pageY);
           }}
-          onLoad={() => setImgLoaded(true)}
+          onLoad={() => {
+            document.getElementById('bh-scale').beginElement();
+            setImgLoaded(true);
+          }}
           className={`space-img ${imgLoaded ? 'loaded' : ''}`}
           src={imgRequested ? '/space_big.jpg' : '#'}
         />
