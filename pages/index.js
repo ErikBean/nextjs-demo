@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useState } from 'react';
-import blackHolePath from '../src/blackHolePath';
+import { smallHole, bigHole } from '../src/blackHolePath';
 export default function Home() {
   const [imgLoaded, setImgLoaded] = useState(false);
   const [imgRequested, setImgRequested] = useState(false);
@@ -10,50 +10,60 @@ export default function Home() {
         <title>CSS Loaders</title>
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
-      <button onClick={() => setImgRequested(!imgRequested)}>
+      <button
+        onClick={() => {
+          setImgRequested(!imgRequested);
+          if (imgRequested) {
+            document.getElementById('zoom-out-hole').beginElement();
+            setImgLoaded(false);
+          }
+        }}
+      >
         {imgRequested ? 'Reset' : 'Load Image'}
       </button>
       <svg width="0" height="0" xmlns="http://www.w3.org/2000/svg">
         <clipPath id="black-hole-clip">
-          <path d={blackHolePath}>
-            {!imgLoaded && (
-              <animateTransform
-                id="bh-spin"
-                attributeName="transform"
-                attributeType="XML"
-                type="rotate"
-                from="0 400 413"
-                to="360 400 413"
-                dur="2s"
-                repeatCount="indefinite"
-              />
-            )}
-
+          <path d={smallHole}>
             <animateTransform
-              id="bh-scale"
+              id="bh-spin"
               attributeName="transform"
               attributeType="XML"
-              type="scale"
-              values="1; 3"
-              dur="4s"
-              repeatCount="1"
+              type="rotate"
+              from="0 400 413"
+              to="360 400 413"
+              dur="2s"
+              repeatCount="indefinite"
+            />
+            <animate
+              id="zoom-in-hole"
+              attributeName="d"
+              dur="8s"
               begin="indefinite"
+              fill="freeze"
+              to={bigHole}
+            />
+            <animate
+              id="zoom-out-hole"
+              attributeName="d"
+              dur="350ms"
+              begin="indefinite"
+              fill="freeze"
+              to={smallHole}
             />
           </path>
         </clipPath>
       </svg>
       <main id="main">
-        <img
-          onClick={(evt) => {
-            console.log(evt.pageX, evt.pageY);
-          }}
-          onLoad={() => {
-            document.getElementById('bh-scale').beginElement();
-            setImgLoaded(true);
-          }}
-          className={`space-img ${imgLoaded ? 'loaded' : ''}`}
-          src={imgRequested ? '/space_big.jpg' : '#'}
-        />
+        <div className="img-mask">
+          <img
+            onLoad={() => {
+              document.getElementById('zoom-in-hole').beginElement();
+              setImgLoaded(true);
+            }}
+            className={`space-img ${imgLoaded ? 'loaded' : ''}`}
+            src={imgRequested ? '/space_big.jpg' : '#'}
+          />
+        </div>
         <footer id="footer">
           <a href="/resources">Resources</a>
         </footer>
@@ -63,21 +73,27 @@ export default function Home() {
         #main {
           display: flex;
           justify-content: space-between;
-           {
-            /* flex-direction: column; */
-          }
+          flex-direction: column;
           align-items: center;
         }
         #footer {
           align-self: flex-start;
         }
         .space-img {
-          background: grey;
-          height: 826px;
-          width: 800px;
-          clip-path: url(#black-hole-clip);
+          height: 100%;
+          width: 100%;
+          opacity: 0;
+          transition: opacity 1s linear;
         }
         .space-img.loaded {
+          opacity: 1;
+        }
+        .img-mask {
+          height: 826px;
+          width: 800px;
+          background-color: ${imgLoaded ? 'transparent' : 'grey'};
+          transition: background-color 1s linear;
+          clip-path: url(#black-hole-clip);
         }
       `}</style>
 
