@@ -7,9 +7,6 @@ export default function getImage(accessKey) {
   return unsplash.photos
     .getRandomPhoto({ query: 'outer space' })
     .then(toJson)
-    .then((json) => {
-      console.log(json);
-      return json.urls.raw;
-    })
+    .then((json) => json.urls.raw)
     .catch((e) => console.error(e));
 }

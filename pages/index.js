@@ -23,7 +23,7 @@ export default function Home() {
         <button
           className="reset"
           onClick={() => {
-            document.getElementById('zoom-out-hole').beginElement();
+            // document.getElementById('zoom-out-hole').beginElement();
             setImgLoaded(false);
             requestImg(setImgSrc);
           }}
@@ -35,18 +35,8 @@ export default function Home() {
       )}
       <svg width="0" height="0" xmlns="http://www.w3.org/2000/svg">
         <clipPath id="black-hole-clip">
-          <path d={smallHole}>
-            <animateTransform
-              id="bh-spin"
-              attributeName="transform"
-              attributeType="XML"
-              type="rotate"
-              from="0 400 413"
-              to="360 400 413"
-              dur="2s"
-              repeatCount="indefinite"
-            />
-            <animate
+          <path d={smallHole} className={`bh-path ${imgLoaded ? 'loaded' : ''}`}>
+            {/* <animate
               id="zoom-in-hole"
               attributeName="d"
               dur="6s"
@@ -61,7 +51,7 @@ export default function Home() {
               begin="indefinite"
               fill="freeze"
               to={smallHole}
-            />
+            /> */}
           </path>
         </clipPath>
       </svg>
@@ -70,7 +60,7 @@ export default function Home() {
           <img
             onLoad={(evt) => {
               setImgLoaded(true);
-              document.getElementById('zoom-in-hole').beginElement();
+              // document.getElementById('zoom-in-hole').beginElement();
             }}
             className={`space-img ${imgLoaded ? 'loaded' : ''}`}
             src={imgSrc || '#'}
@@ -95,6 +85,27 @@ export default function Home() {
             background-position: 0% 50%;
           }
         }
+        @keyframes rotate3D {
+          0% {
+            transform: rotate3d(-1, 1, 0, 60deg) rotate(0deg);
+          }
+          100% {
+            transform: rotate3d(-1, 1, 0, 60deg) rotate(360deg);
+          }
+        }
+        @keyframes rotate3DZoom {
+          0% {
+            transform: rotate3d(-1, 1, 0, 60deg) rotate(0deg) scale(1);
+            opacity: 1;
+          }
+          30%  {
+            
+          }
+          100% {
+            opacity: 0;
+            transform: rotate3d(-1, 1, 0, 60deg) rotate(360deg) scale(100);
+          }
+        }
         #main {
           background-color: black;
           display: flex;
@@ -108,6 +119,16 @@ export default function Home() {
         #resources {
           color: white;
           font-size: 16px;
+        }
+        .bh-path {
+          transform-origin: 400px 413px;
+          animation: rotate3D 2s linear infinite;
+        }
+        .bh-path.loaded {
+          transform-origin: 400px 413px;
+          animation: rotate3DZoom 5s linear;
+          animation-iteration-count: 1;
+          animation-fill-mode: forwards;
         }
         .reset,
         .img-loading {
