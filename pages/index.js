@@ -37,7 +37,7 @@ export default function Home() {
             <animate
               id="zoom-in-hole"
               attributeName="d"
-              dur="8s"
+              dur="6s"
               begin="indefinite"
               fill="freeze"
               to={bigHole}
@@ -57,20 +57,37 @@ export default function Home() {
         <div className="img-mask">
           <img
             onLoad={() => {
-              document.getElementById('zoom-in-hole').beginElement();
               setImgLoaded(true);
+              setTimeout(
+                () => document.getElementById('zoom-in-hole').beginElement(),
+                500,
+              );
             }}
             className={`space-img ${imgLoaded ? 'loaded' : ''}`}
             src={imgRequested ? '/space_big.jpg' : '#'}
           />
         </div>
         <footer id="footer">
-          <a href="/resources">Resources</a>
+          <a id="resources" href="/resources">
+            Resources
+          </a>
         </footer>
       </main>
 
       <style jsx>{`
+        @keyframes shimmer {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 25%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
         #main {
+          background-color: black;
           display: flex;
           justify-content: space-between;
           flex-direction: column;
@@ -79,24 +96,49 @@ export default function Home() {
         #footer {
           align-self: flex-start;
         }
+        #resources {
+          color: white;
+          font-size: 16px;
+        }
         .space-img {
           height: 100%;
           width: 100%;
+          transition: opacity 4s;
           opacity: 0;
-          transition: opacity 1s linear;
         }
         .space-img.loaded {
           opacity: 1;
         }
+
         .img-mask {
           height: 826px;
           width: 800px;
-          background-color: ${imgLoaded ? 'transparent' : 'grey'};
-          transition: background-color 1s linear;
+          background-size: 800% 800%;
+          background-image: repeating-linear-gradient(
+            45deg,
+            violet,
+            indigo,
+            blue,
+            green,
+            yellow,
+            orange,
+            red,
+            orange,
+            yellow,
+            green,
+            blue,
+            indigo
+          );
+          animation: shimmer 8s ease infinite;
           clip-path: url(#black-hole-clip);
         }
       `}</style>
-
+      <style jsx global>{`
+        html,
+        body {
+          background-color: black;
+        }
+      `}</style>
       <style jsx global>{`
         html,
         body,
