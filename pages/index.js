@@ -1,26 +1,38 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { smallHole, bigHole } from '../src/blackHolePath';
+
+const requestImg = (setImgSrc) =>
+  fetch('/api/space')
+    .then((res) => res.text())
+    .then((imgSrc) => setImgSrc(imgSrc));
+
 export default function Home() {
   const [imgLoaded, setImgLoaded] = useState(false);
-  const [imgRequested, setImgRequested] = useState(false);
+  const [imgSrc, setImgSrc] = useState(false);
+  useEffect(() => {
+    requestImg(setImgSrc);
+  }, []);
   return (
     <div className="container">
       <Head>
         <title>CSS Loaders</title>
         {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
-      <button
-        onClick={() => {
-          setImgRequested(!imgRequested);
-          if (imgRequested) {
+      {imgLoaded ? (
+        <button
+          className="reset"
+          onClick={() => {
             document.getElementById('zoom-out-hole').beginElement();
             setImgLoaded(false);
-          }
-        }}
-      >
-        {imgRequested ? 'Reset' : 'Load Image'}
-      </button>
+            requestImg(setImgSrc);
+          }}
+        >
+          Reset
+        </button>
+      ) : (
+        <h2 className="img-loading">Loading from unsplash...</h2>
+      )}
       <svg width="0" height="0" xmlns="http://www.w3.org/2000/svg">
         <clipPath id="black-hole-clip">
           <path d={smallHole}>
@@ -45,7 +57,7 @@ export default function Home() {
             <animate
               id="zoom-out-hole"
               attributeName="d"
-              dur="350ms"
+              dur="500ms"
               begin="indefinite"
               fill="freeze"
               to={smallHole}
@@ -54,17 +66,14 @@ export default function Home() {
         </clipPath>
       </svg>
       <main id="main">
-        <div className="img-mask">
+        <div className="img-mask" id="mask">
           <img
-            onLoad={() => {
+            onLoad={(evt) => {
               setImgLoaded(true);
-              setTimeout(
-                () => document.getElementById('zoom-in-hole').beginElement(),
-                500,
-              );
+              document.getElementById('zoom-in-hole').beginElement();
             }}
             className={`space-img ${imgLoaded ? 'loaded' : ''}`}
-            src={imgRequested ? '/space_big.jpg' : '#'}
+            src={imgSrc || '#'}
           />
         </div>
         <footer id="footer">
@@ -100,17 +109,26 @@ export default function Home() {
           color: white;
           font-size: 16px;
         }
+        .reset,
+        .img-loading {
+          position: absolute;
+          left: 50px;
+          top: 50px;
+        }
+        .img-loading {
+          color: white;
+          font-size: 30px;
+        }
         .space-img {
           height: 100%;
-          width: 100%;
           transition: opacity 4s;
           opacity: 0;
         }
         .space-img.loaded {
           opacity: 1;
         }
-
         .img-mask {
+          overflow: hidden;
           height: 826px;
           width: 800px;
           background-size: 800% 800%;
